@@ -1,0 +1,23 @@
+1
+
+q = 3329, n = 768  (v2.0 sigma=32.5 in rho-convention = std 12.97)
+   std  sec std sec E8noise   DFR std  DFR E8code   feasible
+  0.60      158         144     -9999       -9999   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  0.80      171         156      -632       -9999   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  1.00      182         166      -287        -573   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  1.20      192         174      -144        -288   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  1.50      204         185       -58        -118   -
+  2.00      222         201       -15         -32   -
+  3.00      252         226         2           2   -
+ 12.97      434         376         8          12   -
+
+q = 32768, n = 768  (v2.0 sigma=32.5 in rho-convention = std 12.97)
+   std  sec std sec E8noise   DFR std  DFR E8code   feasible
+  1.00      138         127     -9999       -9999   std noise+std code, std noise+E8 code
+  2.00      163         149     -9999       -9999   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  2.80      177         162      -432        -865   std noise+std code, std noise+E8 code, E8 noise+E8 code
+  4.00      195         178      -113        -228   std noise+E8 code, E8 noise+E8 code
+  6.00      219         199       -19         -40   -
+  8.00      239         215        -2          -6   -
+
+[killed]

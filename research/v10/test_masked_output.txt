@@ -1,0 +1,2 @@
+masked decoder (unshared output) vs verified decoder: 96000/96000 blocks identical (with and without shuffling)
+output share m0 alone: mean 127.3 (uniform 127.5), distinct values 256/256

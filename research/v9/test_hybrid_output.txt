@@ -1,0 +1,10 @@
+Mode C: ML-KEM-768 + X25519  (pk 1216 B, sk 2464 B, ct 1120 B)
+   combiner recomputed independently (OpenSSL X25519 + hashlib SHA3): 300/300
+   round trips (internal): 300/300;  public API with OS randomness: OK
+   tampered lattice part -> different key: 100/100;  tampered X25519 part -> different key: 100/100
+   invalid public key rejected: True;  corrupted secret key rejected: True
+Mode S: AFA12-768-MaxSec + X25519  (pk 1216 B, sk 2464 B, ct 1120 B)
+   combiner recomputed independently (OpenSSL X25519 + hashlib SHA3): 300/300
+   round trips (internal): 300/300;  public API with OS randomness: OK
+   tampered lattice part -> different key: 100/100;  tampered X25519 part -> different key: 100/100
+   invalid public key rejected: True;  corrupted secret key rejected: True

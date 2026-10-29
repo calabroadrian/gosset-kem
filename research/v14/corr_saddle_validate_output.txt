@@ -1,0 +1,13 @@
+AFA12-512-MaxSec: single-direction tails, Monte Carlo vs saddlepoint vs Chernoff
+   type A, lag 1                        P(Z>=0.0727): MC 1e-02  saddle 1.02e-02  chernoff 6.82e-02
+   type A, lag 1                        P(Z>=0.0970): MC 1e-03  saddle 9.73e-04  chernoff 8.25e-03
+   type A, lag 1                        P(Z>=0.1165): MC 1e-04  saddle 9.74e-05  chernoff 9.72e-04
+   type B, distinct block 0, pattern 0  P(Z>=0.0997): MC 1e-02  saddle 1.01e-02  chernoff 7.15e-02
+   type B, distinct block 0, pattern 0  P(Z>=0.1346): MC 1e-03  saddle 1.04e-03  chernoff 9.48e-03
+   type B, distinct block 0, pattern 0  P(Z>=0.1632): MC 1e-04  saddle 1.15e-04  chernoff 1.26e-03
+   R_max consecutive P(R>=1.263): MC 1e-02  saddle-union 8.69e-03
+   R_max consecutive P(R>=1.338): MC 1e-03  saddle-union 9.69e-04
+   R_max consecutive P(R>=1.395): MC 1e-04  saddle-union 1.49e-04
+   R_max distinct    P(R>=1.204): MC 1e-02  saddle-union 1.04e-02
+   R_max distinct    P(R>=1.232): MC 1e-03  saddle-union 9.53e-04
+   R_max distinct    P(R>=1.259): MC 1e-04  saddle-union 7.93e-05

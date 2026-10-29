@@ -1,0 +1,8 @@
+  keccakf                           890 cycles
+  sample_ntt                       6382 cycles
+  cbd eta=2                        1414 cycles
+  ntt                              1766 cycles
+  invntt                           2392 cycles
+  basemul_acc                       556 cycles
+  shake256 J(800B)                 5384 cycles
+  e8_decode_avx2                   1286 cycles

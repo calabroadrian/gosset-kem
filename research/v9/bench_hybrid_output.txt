@@ -1,0 +1,9 @@
+X25519 scalar multiplication: 120288 cycles (median)
+
+mode                                   pk B     sk B     ct B     keygen     encaps     decaps
+C: ML-KEM-768 + X25519                 1216     2464     1120     205206     328388     222988
+S: AFA12-768-MaxSec + X25519           1216     2464     1120     210456     330636     226292
+
+CONSTANT-TIME HYBRID DECAPS (Welch t, fixed valid ct vs random ct, n=50000)
+  C: ML-KEM-768 + X25519           max|t| =  2.38  no leak detected
+  S: AFA12-768-MaxSec + X25519     max|t| =  1.97  no leak detected

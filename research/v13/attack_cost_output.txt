@@ -1,0 +1,6 @@
+AFA12-512-Compact    norm only   615.5 | consecutive   122.4 (Q 2^64.0) | distinct   185.1 (Q 2^63.6)
+AFA12-512-MaxSec     norm only   582.2 | consecutive   142.6 (Q 2^64.0) | distinct   225.3 (Q 2^63.7)
+AFA12-768-Compact    norm only  1544.1 | consecutive   243.8 (Q 2^63.8) | distinct   358.3 (Q 2^63.8)
+AFA12-768-MaxSec     norm only  1269.0 | consecutive   236.8 (Q 2^63.7) | distinct   379.1 (Q 2^63.9)
+AFA12-1024-Compact   norm only 1000000000.0 | consecutive   548.7 (Q 2^63.4) | distinct   783.1 (Q 2^63.7)
+AFA12-1024-MaxSec    norm only  1932.5 | consecutive   330.8 (Q 2^63.6) | distinct   544.7 (Q 2^63.8)

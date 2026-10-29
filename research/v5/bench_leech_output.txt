@@ -1,0 +1,12 @@
+BENCHMARK (median cycles per decapsulation-message decode)
+  ML-KEM poly_tomsg (256 coefs)      :       280
+  E8 constant-time (32 blocks)       :      1102  (3.9x)
+  Leech constant-time ML (8 blocks)  :    841850  (3007x)
+
+CONSTANT-TIME TEST (Welch t, n=300000): leech_decode max|t| = 2.16  no leak detected
+BENCHMARK (median cycles per decapsulation-message decode)
+  ML-KEM poly_tomsg (256 coefs)      :       272
+  E8 constant-time (32 blocks)       :      1104  (4.1x)
+  Leech constant-time ML (8 blocks)  :    858328  (3156x)
+
+CONSTANT-TIME TEST (Welch t, n=300000): leech_decode max|t| = 2.60  no leak detected

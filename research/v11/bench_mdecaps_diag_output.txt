@@ -1,0 +1,10 @@
+TVLA on full masked decapsulation (AFA12-768-MaxSec), fixed-vs-random, sigma=1, 30000+30000 traces, 43956 leakage points per trace
+  first order : max|t| = 5.04  LEAK
+  first order diagnostics: points |t|>4.5: 1 (null expectation 0.30), |t|>4.0: 3 (null expectation 2.78), argmax point 13928
+  second order: max|t| = 171.10  leak (expected for 1st-order masking)
+TVLA on full masked decapsulation (AFA12-768-MaxSec), fixed-vs-random, sigma=1, 30000+30000 traces, 43956 leakage points per trace
+  first order : max|t| = 4.50  no first-order leak detected
+  first order diagnostics: points |t|>4.5: 0 (null expectation 0.30), |t|>4.0: 5 (null expectation 2.78), argmax point 38688
+  second order: max|t| = 170.21  leak (expected for 1st-order masking)
+
+[exited with code 0]

@@ -1,0 +1,5 @@
+[1] multiply-shift rounding: 0 mismatches over 106529 inputs
+[2] encode/decode round trip, all 256 messages: OK
+[3] noisy decode: 6400 blocks, 0 disagreements, 0 of them exact ties
+[3b] uniform random inputs: 2000000 blocks, 391 disagreements, 391 exact ties
+[4] C decoder on real ML-KEM-style noise (k=2, eta=13): block failure 2.000e-05 (96 / 4800000);  v3 Python measurement 1.711e-05, bound 1.705e-05

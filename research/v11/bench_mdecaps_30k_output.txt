@@ -1,0 +1,3 @@
+TVLA on full masked decapsulation (AFA12-768-MaxSec), fixed-vs-random, sigma=1, 30000+30000 traces, 43956 leakage points per trace
+  first order : max|t| = 4.78  LEAK
+  second order: max|t| = 171.47  leak (expected for 1st-order masking)

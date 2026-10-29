@@ -1,0 +1,10 @@
+== AFA12-768-MaxSec  (ek 1184 B, dk 2400 B, ct 1088 B)
+  receiver key checks: ek valid, dk valid
+  KEM ciphertext c      0b77b409e6ff9be8777915c316fde60e...
+  DEM ciphertext C      fde3b057d514dc612761e09e19d0c108...
+  tag                   78a1350afdc5a720e48a81aed2a1b505...
+  message 36 B -> padded/encrypted 64 B (length hidden to 64-byte blocks)
+  [legit]          K == K' : yes | DEM: authenticated
+  recovered: "Orden de Operacion / Datos Sensibles"
+  [tampered KEM ct] K == K' : no | DEM: rejected  (implicit rejection -> unrelated key)
+  [tampered DEM C]  DEM: rejected before decryption

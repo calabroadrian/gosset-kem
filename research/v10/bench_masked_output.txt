@@ -1,0 +1,4 @@
+  ML-KEM poly_tomsg (unmasked)         696 cycles
+  E8 AVX2 (unmasked)                  3542 cycles
+  E8 masked, 1st order              421938 cycles
+  E8 masked + shuffling             422134 cycles

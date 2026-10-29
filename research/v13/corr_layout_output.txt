@@ -1,0 +1,13 @@
+layout consecutive: max type-B sd multiplier 2.958, max blocks-pairs sharing one lag 224
+layout distinct   : max type-B sd multiplier 1.323, max blocks-pairs sharing one lag 8
+AFA12-512-Compact    sd(rho) 0.0350 | consecutive: R p99.9 1.380 (model P 4.8e-04 vs 1e-3), max 1.548 | distinct: R p99.9 1.270 (model P 1.2e-05 vs 1e-3), max 1.329
+AFA12-512-MaxSec     sd(rho) 0.0314 | consecutive: R p99.9 1.339 (model P 5.2e-04 vs 1e-3), max 1.496 | distinct: R p99.9 1.232 (model P 4.7e-05 vs 1e-3), max 1.276
+AFA12-768-Compact    sd(rho) 0.0303 | consecutive: R p99.9 1.328 (model P 5.1e-04 vs 1e-3), max 1.465 | distinct: R p99.9 1.225 (model P 4.0e-05 vs 1e-3), max 1.284
+AFA12-768-MaxSec     sd(rho) 0.0257 | consecutive: R p99.9 1.276 (model P 5.6e-04 vs 1e-3), max 1.437 | distinct: R p99.9 1.182 (model P 1.6e-04 vs 1e-3), max 1.223
+AFA12-1024-Compact   sd(rho) 0.0232 | consecutive: R p99.9 1.249 (model P 5.5e-04 vs 1e-3), max 1.361 | distinct: R p99.9 1.164 (model P 1.7e-04 vs 1e-3), max 1.204
+AFA12-1024-MaxSec    sd(rho) 0.0221 | consecutive: R p99.9 1.235 (model P 6.7e-04 vs 1e-3), max 1.342 | distinct: R p99.9 1.156 (model P 2.0e-04 vs 1e-3), max 1.195
+
+ADVERSARIAL DFR (log2 of the best per-ciphertext failure probability after grinding 2^X messages)
+scheme                  X  consecutive  distinct-lag  ML-KEM same level (norm only)
+AFA12-512-Compact      64        -76.5         -94.6                         -103.7
+AFA12-512-Compact     128        -66.8         -81.4                          -90.8

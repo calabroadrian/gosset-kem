@@ -1,0 +1,10 @@
+  ML-KEM-1024  decapsulation   10/10  OK
+  ML-KEM-1024  encapsulation   25/25  OK
+  ML-KEM-1024  keyGen          25/25  OK
+  ML-KEM-512   decapsulation   10/10  OK
+  ML-KEM-512   encapsulation   25/25  OK
+  ML-KEM-512   keyGen          25/25  OK
+  ML-KEM-768   decapsulation   10/10  OK
+  ML-KEM-768   encapsulation   25/25  OK
+  ML-KEM-768   keyGen          25/25  OK
+NIST ACVP FIPS 203 vectors: ALL PASS

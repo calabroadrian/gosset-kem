@@ -1,0 +1,22 @@
+TAIL MODEL CHECK: P(R_max >= r), Monte Carlo vs Chernoff (Gaussian quadratic form)
+AFA12-512-Compact    | consecutive: P>=1.294: MC 1e-02 bound 7.9e-02, P>=1.379: MC 1e-03 bound 1.2e-02 | distinct: P>=1.235: MC 1e-02 bound 1.8e-01, P>=1.268: MC 1e-03 bound 2.1e-02
+AFA12-512-MaxSec     | consecutive: P>=1.263: MC 1e-02 bound 7.0e-02, P>=1.336: MC 1e-03 bound 1.0e-02 | distinct: P>=1.204: MC 1e-02 bound 1.5e-01, P>=1.232: MC 1e-03 bound 1.5e-02
+AFA12-768-Compact    | consecutive: P>=1.255: MC 1e-02 bound 7.2e-02, P>=1.328: MC 1e-03 bound 1.0e-02 | distinct: P>=1.199: MC 1e-02 bound 1.6e-01, P>=1.228: MC 1e-03 bound 1.6e-02
+AFA12-768-MaxSec     | consecutive: P>=1.217: MC 1e-02 bound 6.1e-02, P>=1.277: MC 1e-03 bound 8.1e-03 | distinct: P>=1.164: MC 1e-02 bound 1.4e-01, P>=1.184: MC 1e-03 bound 1.7e-02
+AFA12-1024-Compact   | consecutive: P>=1.193: MC 1e-02 bound 6.4e-02, P>=1.246: MC 1e-03 bound 8.8e-03 | distinct: P>=1.147: MC 1e-02 bound 1.4e-01, P>=1.166: MC 1e-03 bound 1.5e-02
+AFA12-1024-MaxSec    | consecutive: P>=1.184: MC 1e-02 bound 6.2e-02, P>=1.235: MC 1e-03 bound 8.1e-03 | distinct: P>=1.139: MC 1e-02 bound 1.3e-01, P>=1.156: MC 1e-03 bound 1.5e-02
+
+ADVERSARIAL DFR (log2 best per-ciphertext failure probability after grinding 2^X messages), Chernoff tail
+scheme                  X  consecutive  distinct-lag   ML-KEM (norm only)
+AFA12-512-Compact      64        -65.9         -81.4               -103.7
+AFA12-512-Compact     128        -56.6         -65.2                -90.8
+AFA12-512-MaxSec       64        -69.9         -90.3               -103.7
+AFA12-512-MaxSec      128        -58.6         -71.0                -90.8
+AFA12-768-Compact      64        -90.7        -116.5               -127.9
+AFA12-768-Compact     128        -77.2         -91.2               -114.3
+AFA12-768-MaxSec       64        -89.4        -114.1               -127.9
+AFA12-768-MaxSec      128        -73.9         -93.3               -114.3
+AFA12-1024-Compact     64       -121.4        -150.3               -141.3
+AFA12-1024-Compact    128        -99.2        -125.0               -127.2
+AFA12-1024-MaxSec      64       -106.6        -134.1               -141.3
+AFA12-1024-MaxSec     128        -85.8        -113.4               -127.2

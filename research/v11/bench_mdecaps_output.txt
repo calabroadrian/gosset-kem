@@ -1,0 +1,11 @@
+CYCLES (median, masked and unmasked interleaved, 1000 reps)
+  AFA12-512-MaxSec     unmasked     62532   masked     397704   (x6.4)
+  AFA12-768-MaxSec     unmasked    101176   masked     540214   (x5.3)
+  AFA12-1024-MaxSec    unmasked    142336   masked     665316   (x4.7)
+
+TVLA on full masked decapsulation (AFA12-768-MaxSec), fixed-vs-random, sigma=1, 10000+10000 traces, 43956 leakage points per trace
+  first order : max|t| = 4.50  no first-order leak detected
+  second order: max|t| = 99.55  leak (expected for 1st-order masking)
+TVLA on full masked decapsulation (AFA12-768-MaxSec), CONTROL random-vs-random, sigma=1, 10000+10000 traces, 43956 leakage points per trace
+  first order : max|t| = 4.31  no first-order leak detected
+  second order: max|t| = 3.73  none detected

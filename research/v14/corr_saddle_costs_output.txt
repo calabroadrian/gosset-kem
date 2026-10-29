@@ -1,0 +1,6 @@
+AFA12-512-Compact    consecutive: DFR@2^64   -64.0 @2^128   -51.8 cost  127.4 | distinct: DFR@2^64   -84.1 @2^128   -64.0 cost  192.0
+AFA12-512-MaxSec     consecutive: DFR@2^64   -70.9 @2^128   -54.5 cost  147.6 | distinct: DFR@2^64   -92.8 @2^128   -72.5 cost  232.4
+AFA12-768-Compact    consecutive: DFR@2^64   -92.0 @2^128   -71.2 cost  249.0 | distinct: DFR@2^64  -119.9 @2^128   -92.5 cost  365.4
+AFA12-768-MaxSec     consecutive: DFR@2^64   -91.5 @2^128   -71.6 cost  242.2 | distinct: DFR@2^64  -116.0 @2^128   -95.2 cost  386.6
+AFA12-1024-Compact   consecutive: DFR@2^64  -124.3 @2^128   -98.6 cost  554.4 | distinct: DFR@2^64  -154.5 @2^128  -127.0 cost  790.7
+AFA12-1024-MaxSec    consecutive: DFR@2^64  -108.8 @2^128   -86.1 cost  336.4 | distinct: DFR@2^64  -136.6 @2^128  -114.8 cost  552.3

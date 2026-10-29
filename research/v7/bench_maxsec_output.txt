@@ -1,0 +1,24 @@
+scheme             ek B   dk B   ct B roundtrip implicit-reject
+ML-KEM-512          800   1632    768        OK 200/200
+ML-KEM-768         1184   2400   1088        OK 200/200
+ML-KEM-1024        1568   3168   1568        OK 200/200
+AFA12-512-MaxSec    800   1632    768        OK 200/200
+AFA12-768-MaxSec   1184   2400   1088        OK 200/200
+AFA12-1024-MaxSec   1568   3168   1568        OK 200/200
+
+CYCLES (median, standard and E8 interleaved in the same loop, 10000 reps each)
+level            keygen std   keygen Max   encaps std   encaps Max   decaps std   decaps Max
+ML-KEM-512            47058        47200        48124        50414        61074        64200
+  MaxSec vs std                     +0.3%                     +4.8%                     +5.1%   (decaps delta +3126 cycles)
+ML-KEM-768            81810        87076        80278        82410        97704       100526
+  MaxSec vs std                     +6.4%                     +2.7%                     +2.9%   (decaps delta +2822 cycles)
+ML-KEM-1024          129866       137112       126026       129168       144804       147962
+  MaxSec vs std                     +5.6%                     +2.5%                     +2.2%   (decaps delta +3158 cycles)
+
+CONSTANT-TIME DECAPS (Welch t, fixed valid ct vs random ct, n=100000)
+  ML-KEM-512       max|t| =   1.46  no leak detected
+  ML-KEM-768       max|t| =   1.36  no leak detected
+  ML-KEM-1024      max|t| =   2.23  no leak detected
+  AFA12-512-MaxSec max|t| =   2.06  no leak detected
+  AFA12-768-MaxSec max|t| =   1.75  no leak detected
+  AFA12-1024-MaxSec max|t| =   1.19  no leak detected

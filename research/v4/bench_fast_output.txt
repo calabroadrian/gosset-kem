@@ -1,0 +1,13 @@
+CORRECTNESS vs verified decoder: 6400000 blocks, fast diffs 0, avx2 diffs 0, non-tie diffs 0
+
+BENCHMARK (median cycles / 256 coefficients)
+  ML-KEM poly_tomsg (reference)  :     266
+  E8 decoder v4.0 (first version):    4572  (17.2x)
+  E8 decoder fast (scalar int32) :    4418  (16.6x)
+  E8 decoder AVX2                :    1346  (5.1x)
+
+CONSTANT-TIME TEST, n=5000000
+  e8_decode_fast   max|t| =   0.90  no leak detected
+  e8_decode_avx2   max|t| =   2.27  no leak detected
+  std_decode_ref   max|t| =   0.86  no leak detected
+  LEAKY control    max|t| = 24828.08  LEAK

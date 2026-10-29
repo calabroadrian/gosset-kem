@@ -1,0 +1,24 @@
+scheme             ek B   dk B   ct B roundtrip implicit-reject
+ML-KEM-512          800   1632    768        OK 200/200
+ML-KEM-768         1184   2400   1088        OK 200/200
+ML-KEM-1024        1568   3168   1568        OK 200/200
+ML-KEM-512+E8       800   1632    704        OK 200/200
+ML-KEM-768+E8      1184   2400   1024        OK 200/200
+ML-KEM-1024+E8     1568   3168   1408        OK 200/200
+
+CYCLES (median, standard and E8 interleaved in the same loop, 10000 reps each)
+level            keygen std    keygen E8   encaps std    encaps E8   decaps std    decaps E8
+ML-KEM-512            49290        49342        50006        49548        63448        64026
+  E8 vs std                        +0.1%                     -0.9%                     +0.9%   (decaps delta +578 cycles)
+ML-KEM-768            82902        82890        81676        81374        98116        98052
+  E8 vs std                        -0.0%                     -0.4%                     -0.1%   (decaps delta -64 cycles)
+ML-KEM-1024          137180       136950       134004       133326       152622       152688
+  E8 vs std                        -0.2%                     -0.5%                     +0.0%   (decaps delta +66 cycles)
+
+CONSTANT-TIME DECAPS (Welch t, fixed valid ct vs random ct, n=100000)
+  ML-KEM-512       max|t| =   3.03  no leak detected
+  ML-KEM-768       max|t| =   2.50  no leak detected
+  ML-KEM-1024      max|t| =   2.72  no leak detected
+  ML-KEM-512+E8    max|t| =   0.83  no leak detected
+  ML-KEM-768+E8    max|t| =   0.96  no leak detected
+  ML-KEM-1024+E8   max|t| =   2.07  no leak detected

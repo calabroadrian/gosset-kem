@@ -1,0 +1,8 @@
+Golay octads: 759 (expected 759)
+Leech consecutive block: {'pair (4,4)': 1.0, 'octad (2^8)': np.float64(2.5), '(3,1^23)': np.float64(4.896)}
+E8 consecutive block: {'pair (4,4)': 1.0, 'E8 half (1/2^8)': np.float64(2.958)}
+E8 v13 layout (worst block): 1.323
+Leech optimised layout, seed 0: worst exposure 2.159
+Leech optimised layout, seed 1: worst exposure 2.138
+Leech optimised layout, seed 2: worst exposure 2.151
+Leech best layout per type (worst block): {'pair (4,4)': 1.0, 'octad (2^8)': np.float64(1.803), '(3,1^23)': np.float64(2.138)}

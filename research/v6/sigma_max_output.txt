@@ -1,0 +1,2 @@
+standard code: sigma_max = 1.235  -> security std noise 193 bits, E8 noise 175 bits
+E8 code     : sigma_max = 1.470  -> security std noise 203 bits, E8 noise 184 bits

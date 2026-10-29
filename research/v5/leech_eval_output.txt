@@ -1,0 +1,19 @@
+A) SAME PARAMETERS (du, dv as in FIPS 203)
+scheme       target      std       E8    Leech  ct std/E8  ct Leech
+ML-KEM-512     -139   -139.1   -240.7   -199.9        768       736
+ML-KEM-768     -164   -165.3   -279.4   -228.2       1088      1056
+ML-KEM-1024    -174   -175.2   -335.0   -313.1       1568      1528
+
+B) SMALLEST CIPHERTEXT meeting the published DFR target (search du, dv)
+ML-KEM-512 (FIPS 203 ciphertext 768 B, target 2^-139):
+   std      768 B  (+0.0%)  du=10 dv=4  DFR 2^-139.1
+   E8       704 B  (-8.3%)  du=9 dv=4  DFR 2^-142.0
+   Leech    696 B  (-9.4%)  du=9 dv=5  DFR 2^-167.8
+ML-KEM-768 (FIPS 203 ciphertext 1088 B, target 2^-164):
+   std     1088 B  (+0.0%)  du=10 dv=4  DFR 2^-165.3
+   E8      1024 B  (-5.9%)  du=9 dv=5  DFR 2^-194.1
+   Leech    984 B  (-9.6%)  du=9 dv=5  DFR 2^-182.8
+ML-KEM-1024 (FIPS 203 ciphertext 1568 B, target 2^-174):
+   std     1568 B  (+0.0%)  du=11 dv=5  DFR 2^-175.2
+   E8      1408 B  (-10.2%)  du=10 dv=4  DFR 2^-215.0
+   Leech   1376 B  (-12.2%)  du=10 dv=4  DFR 2^-180.2

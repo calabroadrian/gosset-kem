@@ -1,0 +1,12 @@
+  batch 10/40
+  batch 20/40
+  batch 30/40
+  batch 40/40
+
+REAL ENCRYPTIONS k=2, eta=14, du=10, dv=4: 80000 ciphertexts, 299 block failures, predicted 303.1
+  R_max bottom 50%   (R 1.014-1.098): ciphertexts  40000  failures observed   162  predicted    147.4  rate per ct 4.05e-03 vs 3.68e-03
+  R_max 50-90%       (R 1.098-1.166): ciphertexts  32000  failures observed   103  predicted    123.2  rate per ct 3.22e-03 vs 3.85e-03
+  R_max 90-99%       (R 1.166-1.258): ciphertexts   7200  failures observed    30  predicted     28.9  rate per ct 4.17e-03 vs 4.01e-03
+  R_max top 1%       (R 1.258-1.487): ciphertexts    800  failures observed     4  predicted      3.6  rate per ct 5.00e-03 vs 4.53e-03
+  T bottom 50%      : ciphertexts  39945  failures observed    92  predicted     92.8
+  T top 1%          : ciphertexts    802  failures observed     4  predicted      9.8

@@ -1,0 +1,7 @@
+build/
+research/**/*.so
+__pycache__/
+*.pyc
+docs/paper/*.aux
+docs/paper/*.log
+docs/paper/*.out

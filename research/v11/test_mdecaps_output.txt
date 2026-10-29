@@ -1,0 +1,6 @@
+AFA12-512-Compact    valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60
+AFA12-768-Compact    valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60
+AFA12-1024-Compact   valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60
+AFA12-512-MaxSec     valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60
+AFA12-768-MaxSec     valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60
+AFA12-1024-MaxSec    valid ct: key 60/60, flag 60/60 | tampered ct: key 60/60 (implicit rejection), flag 60/60

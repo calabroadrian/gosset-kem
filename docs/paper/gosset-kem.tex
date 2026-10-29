@@ -1,0 +1,196 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\hypersetup{colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black}
+\newtheorem{observation}{Observation}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathsf{E}_8}
+\newcommand{\lt}{\log_2}
+
+\title{Gosset-KEM: E8 Message Coding for ML-KEM\\ and Correlation-Based Failure Boosting\\ against Multi-Dimensional Lattice Codes}
+\author{Adrian Calabro\\ \small Independent researcher \\ \small \texttt{calabroadrian@gmail.com}}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Replacing the one-bit-per-coefficient message encoding of ML-KEM (FIPS~203) by a multi-dimensional lattice code lowers the decryption failure rate (DFR), and the margin can be spent on smaller ciphertexts or on more noise. We study the Gosset lattice $\E$ in this role and make four contributions.
+(i)~We give exact DFRs for all three ML-KEM levels and validate the independence assumption behind them on real ring encryptions.
+(ii)~We define two families of parameter sets with FIPS~203 key sizes: \emph{Compact}, with 6--10\% smaller ciphertexts at unchanged lattice security, and \emph{MaxSec}, which gains $+5$ to $+11$ bits against the strongest attacks of the lattice-estimator (dual-hybrid, MATZOV cost model) at unchanged sizes.
+(iii)~We identify a \emph{correlation-based failure-boosting attack} specific to multi-dimensional codes. Because an $\E$ block fails along directions that combine 8 coefficients, an adversary who grinds ciphertexts with a large autocorrelation of the encryption randomness at the in-block index distances raises their failure probability; the standard decoder is immune. With consecutive blocks, the cost of a first failure within $2^{64}$ queries drops to $2^{127}$ for the level-1 Compact set, below its claimed security. We propose a public coefficient layout in which the 28 pairwise index distances of every block are distinct. It raises the cost to $2^{192}$, leaves the average DFR unchanged, and costs nothing. We show that the Leech lattice is inherently more exposed.
+(iv)~We provide a complete constant-time C implementation (NIST ACVP vectors pass), a first-order masked decapsulation with a bitsliced masked $\E$ decoder, a hybrid mode with X25519, and an analysis of compiler-induced timing leaks found on two compilers and two CPU vendors.
+We also report a negative result: placing $\E$ structure in the LWE \emph{noise} instead of the message weakens security by $\log_2$ of the sublattice index.
+\end{abstract}
+
+\section{Introduction}
+
+ML-KEM~\cite{fips203} encodes each message bit into one polynomial coefficient as $0$ or $\lceil q/2\rfloor$ and decodes by rounding. Lattice codes improve this: they pack message points densely in several dimensions, so a larger noise vector is tolerated for the same failure probability~\cite{saliba21,liu23,paiva24,liu26}. Liu and Sakzad recently proposed $\E$-type codes for Kyber~\cite{liu26}, reporting a DFR of $2^{-286}$ for Kyber-1024 under a Gaussian approximation. We call our family \emph{Gosset-KEM}, after Thorold Gosset, who in 1900 discovered the $4_{21}$ polytope whose 240 vertices are the minimal vectors of $\E$\footnote{Not to be confused with W.~S.~Gosset (``Student''). The project was developed under the working name AFA-12.}.
+
+Previous work treats the DFR of a lattice-coded scheme as an \emph{average} over honest ciphertexts. In the chosen-ciphertext setting, however, an adversary chooses which ciphertexts to submit, and failure-boosting attacks~\cite{danvers19,danvers20} exploit ciphertexts with a higher-than-average failure probability. This paper asks whether the multi-dimensional structure of the code itself gives the adversary new ways to find such ciphertexts. It does.
+
+\paragraph{Contributions.}
+\begin{enumerate}[leftmargin=*,itemsep=2pt]
+\item \textbf{Exact DFRs and validation} (\S\ref{sec:dfr}). By exact convolution with a union bound over the 240 Voronoi-relevant vectors of $\E$ we obtain $2^{-240.7}/2^{-279.4}/2^{-335.0}$ at the ML-KEM-512/768/1024 parameters (standard decoding: $2^{-139.1}/2^{-165.3}/2^{-175.2}$). The Gaussian approximation reproduces~\cite{liu26} but underestimates the gain. The independence assumption is confirmed with real encryptions at inflated noise: measured $1.711\cdot10^{-5}$ against predicted $1.705\cdot10^{-5}$.
+\item \textbf{Parameter sets} (\S\ref{sec:params}): Compact and MaxSec, evaluated with the lattice-estimator~\cite{estimator} on both the key and the ciphertext LWE instances.
+\item \textbf{A new attack and countermeasure} (\S\ref{sec:attack}). This is our main contribution: correlation-based failure boosting, a rigorous tail model (Chernoff bound and Lugannani--Rice saddlepoint, validated against Monte Carlo), the distinct-distance layout, directional boosting after the first failure, and the Leech lattice.
+\item \textbf{Implementation} (\S\ref{sec:impl}): constant-time decoding, masking, a hybrid mode, cross-platform tests, and the compiler and microarchitecture findings.
+\item \textbf{A negative result} (\S\ref{sec:negative}): $\E$-structured noise.
+\end{enumerate}
+All code, test vectors and analysis scripts are public, and every number in this paper is reproducible from them.
+
+\section{Background}\label{sec:bg}
+
+\paragraph{ML-KEM.} Let $q=3329$, $n=256$, $R_q=\Z_q[X]/(X^n+1)$. K-PKE has secret $\mathbf{s}$, error $\mathbf{e}\leftarrow\beta_{\eta_1}^k$ and public key $\mathbf{t}=\mathbf{A}\mathbf{s}+\mathbf{e}$. Encryption samples $\mathbf{r}\leftarrow\beta_{\eta_1}^k$, $\mathbf{e}_1\leftarrow\beta_{\eta_2}^k$, $e_2\leftarrow\beta_{\eta_2}$ from $G(m\|H(\mathrm{ek}))$ and outputs $\mathbf{u}=\mathrm{Compress}_{d_u}(\mathbf{A}^T\mathbf{r}+\mathbf{e}_1)$ and $v=\mathrm{Compress}_{d_v}(\mathbf{t}^T\mathbf{r}+e_2+\mu)$. Decryption computes
+\[ w = v-\mathbf{s}^T\mathbf{u} = \mu + \underbrace{\mathbf{e}^T\mathbf{r} - \mathbf{s}^T(\mathbf{e}_1+\mathbf{c}_u) + e_2 + c_v}_{\delta}, \]
+where $\mathbf{c}_u,c_v$ are the compression errors. The Fujisaki--Okamoto transform with implicit rejection turns K-PKE into an IND-CCA2 KEM; its security bound contains the DFR~\cite{hhk17}.
+
+\paragraph{Decryption errors as inner products.} Write $S=(\mathbf{e},-\mathbf{s})\in\Z^{2kn}$ (secret) and $C=(\mathbf{r},\mathbf{e}_1+\mathbf{c}_u)$, $G=e_2+c_v$. These are known to whoever generates the ciphertext, which in the CCA setting means anyone who chooses $m$. Then $\delta_i=\langle S, C_i\rangle + G_i$, where $C_i$ is the negacyclic rotation of $C$ that produces coefficient $i$.
+
+\paragraph{$\E$.} $\E=D_8\cup(D_8+\tfrac12\mathbf{1})$ with $D_8=\{x\in\Z^8:\sum x_i\equiv0 \pmod 2\}$. It has 240 minimal vectors of squared norm 2, which are also its Voronoi-relevant vectors: 112 of type $(\pm1^2,0^6)$ and 128 of type $(\pm\frac12^8)$ with an even number of minus signs. Nearest-point decoding uses two $D_8$ decoders~\cite{conway}. The code $(q/2)\E \bmod q\Z^8$ carries 8 bits per 8 coefficients, the same rate as ML-KEM.
+
+\section{A negative result: $\E$ in the noise}\label{sec:negative}
+Our starting idea was to sample LWE errors from a structured distribution over $\E$ (Construction~A of the $[8,4,4]$ Hamming code). It fails.
+\begin{observation}
+If the error vector lies in a sublattice $L\subset\Z^k$ of index $D$, an attacker who knows $L$ can reduce LWE with error $\sigma$ to an instance with error $\sigma D^{-1/k}$ and loses nothing. Equivalently, the entropy drops by $\log_2 D$ bits per block. For integral $\E$ ($\sqrt2\E$, $D=16$) this halves the effective variance.
+\end{observation}
+With a primal-attack estimator validated against Kyber, equal-variance $\E$ noise lost 5, 11, 17 and 22 bits at $n=256,512,768,1024$. Real LLL/BKZ attacks on small instances confirmed it: a structure-aware attacker succeeded in 60\% of trials, against 0\% with i.i.d.\ noise of the same variance, matching the behaviour of i.i.d.\ noise at half the variance. Lattice codes belong in the \emph{message}: they protect, they do not hide.
+
+\section{$\E$ message coding: exact DFR and validation}\label{sec:dfr}
+
+\paragraph{Encoding and decoding.} Byte $b$ of $m$ gives a coset bit $c$ and $x_0..x_6$, with $x_7=\oplus x_i$. The coefficients are $\mu_i=\mathrm{round}((q/2)(x_i+c/2))$. Decoding is nearest-point decoding in $(q/2)\E$ using integer arithmetic on $Y=4\,\mathrm{cent}(w)$, with deterministic tie-breaking; the specification is in the repository.
+
+\paragraph{Exact DFR.} We compute the exact distribution of each coefficient of $\delta$ by convolution, which reproduces the official ML-KEM DFRs exactly. Assuming the 8 coefficients of a block are independent, block failure is bounded by the union over the 240 relevant vectors $u$ of $\Pr[\langle\delta,u\rangle>q/2]$:
+\begin{center}\small
+\begin{tabular}{lccc}\toprule
+$\lt$ DFR & ML-KEM-512 & ML-KEM-768 & ML-KEM-1024\\\midrule
+standard decoding & $-139.1$ & $-165.3$ & $-175.2$\\
+$\E$, exact & $-240.7$ & $-279.4$ & $-335.0$\\
+$\E$, Gaussian approximation & $-152.2$ & $-162.7$ & $-290.9$\\\bottomrule
+\end{tabular}
+\end{center}
+The Gaussian approximation is very pessimistic when $d_v=4$, because the compression error is bounded and not Gaussian. It reproduces the $2^{-286}$ of~\cite{liu26} within 5 bits.
+
+\paragraph{Validation of independence.} In a real ciphertext the 8 coefficients of a block share $\mathbf{s},\mathbf{e}$. We ran real ring encryptions at inflated noise ($k=2$, $\eta=13$) to make failures measurable. The block failure rate was $1.711\cdot10^{-5}$ against $1.705\cdot10^{-5}$ predicted, and the independent C implementation measured $2.0\cdot10^{-5}$ over $4.8\cdot10^6$ blocks. On average, the independence model is accurate. Section~\ref{sec:attack} shows that this does \emph{not} hold for adversarially chosen ciphertexts.
+
+\section{Parameter sets}\label{sec:params}
+\begin{center}\small
+\begin{tabular}{lccccccc}\toprule
+set & $k$ & $\eta_1$ & $\eta_2$ & $d_u$ & $d_v$ & ct (B) & $\lt$ DFR\\\midrule
+Gosset-KEM-512-Compact & 2 & 3 & 2 & 9 & 4 & 704 ($-8.3\%$) & $-142.0$\\
+Gosset-KEM-768-Compact & 3 & 2 & 2 & 9 & 5 & 1024 ($-5.9\%$) & $-194.1$\\
+Gosset-KEM-1024-Compact & 4 & 2 & 2 & 10 & 4 & 1408 ($-10.2\%$) & $-215.0$\\
+Gosset-KEM-512-MaxSec & 2 & 4 & 3 & 10 & 4 & 768 & $-146.6$\\
+Gosset-KEM-768-MaxSec & 3 & 3 & 2 & 10 & 4 & 1088 & $-166.8$\\
+Gosset-KEM-1024-MaxSec & 4 & 3 & 2 & 11 & 5 & 1568 & $-189.4$\\\bottomrule
+\end{tabular}
+\end{center}
+Compact sets keep the ML-KEM noise, so they keep its lattice security. MaxSec sets keep FIPS~203 sizes and use more noise ($\eta=4$ is a straightforward extension of the CBD); among all choices with FIPS ciphertext size and a DFR no worse than FIPS, they are optimal.
+
+\paragraph{Lattice security.} We evaluated both LWE instances, the key ($\mathbf{s},\mathbf{e}$) and the ciphertext ($\mathbf{r}$ as secret, $\mathbf{e}_1$ plus optional rounding as error), with the lattice-estimator~\cite{estimator} (all attacks except Arora--GB and BKW, MATZOV cost model~\cite{matzov}). The weakest link, in $\lt$ of bit operations:
+\begin{center}\small
+\begin{tabular}{lccc}\toprule
+& 512 & 768 & 1024\\\midrule
+ML-KEM & 139.7 & 196.4 & 262.3\\
+Gosset-KEM MaxSec & 144.9 & 207.2 & 271.7\\
+gain (rounding credited / not credited) & $+5.2$ / $+5.6$ & $+10.8$ / $+4.8$ & $+9.4$ / $+5.3$\\\bottomrule
+\end{tabular}
+\end{center}
+The dual-hybrid attack is the cheapest in every case. At levels 768 and 1024 the ciphertext instance becomes the bottleneck, because MaxSec there raises $\eta_1$ but not $\eta_2$.
+
+\section{Correlation-based failure boosting}\label{sec:attack}
+
+\subsection{The effect}
+For two coefficients $a,b$ of the same ciphertext,
+\[ \mathrm{Cov}(\delta_a,\delta_b) = \sigma_S^2\, A(b-a),\qquad A(d)=\sum_{\text{polys}}\sum_j c_j c_{j+d}\ (\text{negacyclic}), \]
+so the covariance depends on the attacker-known autocorrelation of $C$. A standard decoder fails when a single coefficient is too large, so these covariances do not matter to it. An $\E$ decoder fails when $\langle\delta,u\rangle>q/2$ for a relevant $u$. The variance of that projection is $\sigma_S^2 u^T M u=2\sigma_S^2 T\cdot R(u)$, with $T=\|C\|^2$ and
+\[ R(u) = 1+\sum_{a<b}\frac{2u_au_b}{\|u\|^2}\rho_{d_{ab}},\qquad \rho_d=A(d)/T. \]
+A random ciphertext has $\rho_d\approx\mathcal N(0,1/(2kn))$. An adversary who grinds messages $m$ (the CCA setting: $C$ and $G$ are deterministic functions of $m$) can select ciphertexts with large $R(u)$ for some $u$. This multiplies the failure exponent by roughly $1/R$.
+
+\begin{observation}[Consecutive blocks amplify the effect]
+With blocks of 8 consecutive coefficients, index distance $d$ appears in $8-d$ pairs of every block. For the all-plus type-$(\frac12^8)$ vector, the coefficient of $\rho_1$ in $R$ is $7/4$, and the standard deviation of $R-1$ is $\sqrt{\sum_{d=1}^{7}((8-d)/4)^2}\approx2.96$ times that of a single $\rho_d$. Every block shares the same distances, so one ground ciphertext boosts all 32 blocks at once.
+\end{observation}
+
+\subsection{Tail model}
+$Z=C^T Q_u C/C^TC$ is a ratio of quadratic forms. Negacyclic shifts are diagonalised by the odd Fourier basis, so $Q_u=\sum_\ell w_\ell(P^\ell+P^{-\ell})/2$ has eigenvalues $\mu_j=\sum_\ell w_\ell\cos(\pi(2j+1)\ell/n)$. Then $\Pr[Z\ge x]=\Pr[C^T(Q_u-xI)C\ge0]$.
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item A Chernoff bound with the Gaussian MGF of this form overestimates Monte Carlo tails by a factor of 7--10, so it favours the attacker.
+\item The Lugannani--Rice saddlepoint approximation matches Monte Carlo (with the true CBD and rounding entries) within 2--15\% down to $10^{-4}$, for both single directions and the union over all directions.
+\item The tails are visibly heavier than Gaussian, so a naive Gaussian model on $\rho$ underestimates the attack.
+\end{itemize}
+We combine this with norm grinding~\cite{danvers19}, using a Chernoff bound on $\Pr[T\ge t]$. The per-ciphertext failure model was validated on $8\cdot10^4$ real encryptions at inflated noise: 299 failures observed against 303 predicted, consistent within each correlation bucket.
+
+\subsection{Attack cost and countermeasure}
+The cost of the first failure is $W=1/(\alpha\beta)$ with $Q=1/\beta\le2^{64}$ queries, where $\alpha$ is the fraction of usable ciphertexts and $\beta$ their failure probability.
+
+\paragraph{Countermeasure.} We use a fixed public permutation \texttt{E8\_LAYOUT} that assigns 8 coefficient positions to each block such that the 28 pairwise distance classes $\min(d,256-d)$ inside every block are distinct. Such a layout is easy to find by randomised greedy search; ours uses each distance class in at most 9 blocks. Now a single large $\rho_d$ affects one pair per block, with weight $\frac14$ in the type-$(\frac12^8)$ directions, and the standard-deviation multiplier drops from $2.96$ to $1.32$. Distance 128 has zero correlation, since $A(256-d)=-A(d)$. The average DFR is unchanged: in a real-encryption test both layouts gave $2.11\cdot10^{-5}$, with disjoint failing ciphertexts.
+
+\begin{center}\small
+\begin{tabular}{lcccc}\toprule
+$\lt$ work, first failure ($Q\le2^{64}$) & consecutive & \textbf{distinct layout} & claimed level\\\midrule
+Gosset-KEM-512-Compact & 127.4 & \textbf{192.0} & $\approx$140\\
+Gosset-KEM-512-MaxSec & 147.6 & \textbf{232.4} & 144.9\\
+Gosset-KEM-768-Compact & 249.0 & \textbf{365.4} & $\approx$196\\
+Gosset-KEM-768-MaxSec & 242.2 & \textbf{386.6} & 207.2\\
+Gosset-KEM-1024-Compact & 554.4 & \textbf{790.7} & $\approx$262\\
+Gosset-KEM-1024-MaxSec & 336.4 & \textbf{552.3} & 271.7\\\bottomrule
+\end{tabular}
+\end{center}
+With norm grinding alone the cost is $\ge2^{515}$ for every set, ML-KEM included, so the gap comes entirely from correlation. After $2^{64}$ grinding, the best per-ciphertext failure probability for Gosset-KEM-512-MaxSec is $2^{-92.8}$ with the layout and $2^{-70.9}$ without; ML-KEM-512 reaches $2^{-103.7}$.
+
+\subsection{After the first failure}
+Using the geometric model of~\cite{danvers20} with attacker-favourable assumptions (the failing direction is known, and each failure carries full information), later failures become much cheaper in every scheme. They remain costlier for Gosset-KEM than for ML-KEM: the second failure costs $2^{145}$ against $2^{85}$ at level 512 and $2^{200}$ against $2^{103}$ at level 768. The larger relative threshold of $\E$ outweighs its larger number of decoding directions ($32\cdot240$ against 256). The first failure therefore dominates, as for Kyber~\cite{danvers20}. Multi-target attacks are not counted, as for ML-KEM. With the layout, Gosset-KEM-512-Compact tolerates up to $2^{49}$ targets before falling below $2^{143}$.
+
+\subsection{Higher dimensions: the Leech lattice}
+For $\Lambda_{24}$ (10 blocks of 24 coordinates), the minimal vectors of type $(\mp3,\pm1^{23})$ involve 276 pairs. Only 127 distance classes exist, so no layout makes them distinct. The worst-direction multiplier is $4.90$ with consecutive blocks and $2.14$ with the best layout we found, against $1.32$ for $\E$. Larger codes buy more average-case margin but are more exposed to this attack. \emph{Any multi-dimensional code for LWE message encoding should be analysed against correlation-based boosting, and its coefficient layout chosen accordingly.}
+
+\section{Implementation}\label{sec:impl}
+\paragraph{Correctness.} The implementation is C99 with AVX2. It passes the NIST ACVP vectors for ML-KEM (180/180, plus 60/60 key checks), and a separate reference build agrees bit for bit on all nine parameter sets. A deterministic cross-platform digest over all schemes is identical under gcc and clang on Linux and on Windows (MinGW).
+
+\paragraph{Constant time.} The decoder is branch-free; an AVX2 version runs in about 1,300 cycles, against about 300 for the reference \texttt{poly\_tomsg}. The decapsulation overhead is at most $0.9\%$ for Compact and $2$--$7\%$ for MaxSec, the latter mostly from extra SHAKE output. dudect-style Welch tests stay at $|t|\le3.5$ on Intel Xeon and AMD Zen~3, while positive controls reach $|t|>10^4$. Two findings:
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item \textbf{Compiler-inserted branches.} clang~18 \texttt{-O3} turned the mask logic of a portable reference decoder into secret-dependent branches ($|t|\approx1700$); gcc did the same to a Leech decoder. Value barriers fix both, and timing must be checked for each compiler.
+\item \textbf{A fixed-input artefact on Zen~3.} One gcc binary showed $|t|$ of 10 to 19 at $10^6$ measurements, only when the same ciphertext was repeated. The effect was 5--10 cycles out of 85,000. ML-KEM-512 showed it too, and valid and invalid ciphertexts remained indistinguishable ($|t|\le1.9$). We classify it as a low-impact microarchitectural effect on public input.
+\end{itemize}
+
+\paragraph{Masking.} We built a first-order masked decapsulation. Masked Keccak uses ISW AND gadgets~\cite{isw}; the CBD is computed on bits with B2A conversion; the ciphertext comparison uses public decompression intervals; and the key is selected on shares, so only the chosen key is unmasked. A multiplication-free reformulation of the $\E$ decision, $D=\sum a_i-4q+p_A(2q-2a_{\max})-p_B\,2a_{\min}$, allows a bitsliced masked decoder with 32 blocks per word: 34k cycles, 12.3 times faster than per-block masking. The full masked decapsulation costs 4.7--6.4 times the unmasked one. In simulated TVLA (Hamming-weight model, $\sigma=1$, 43,956 points, up to $3\cdot10^4$ traces per class, four runs), the first-order $|t|$ stays below the Bonferroni threshold or does not repeat across runs, while second-order leakage remains, as expected.
+
+\paragraph{Hybrid and DEM.} An X-Wing-style combiner~\cite{xwing} with X25519 gives Mode~C (ML-KEM-768, FIPS-compliant) and Mode~S (Gosset-KEM-768-MaxSec). A DEM with SHAKE-derived keys, ISO~7816-4 padding and encrypt-then-MAC (HMAC-SHA3-256) completes the hybrid encryption.
+
+\section{Limitations}
+\begin{itemize}[leftmargin=*,itemsep=1pt]
+\item Gosset-KEM is not FIPS~203 and is not certifiable as it stands. A compliant deployment uses Mode~C, or a three-component hybrid.
+\item The DFR and failure-boosting analyses rely on Gaussian conditional models, validated empirically down to about $10^{-5}$ per block. Beyond that they are extrapolations, as for ML-KEM.
+\item The masking results come from simulation; hardware validation, a production CSPRNG and higher-order masking remain open.
+\item Key generation does not bind the parameter set: $G(d\|k)$ is the same for ML-KEM-512 and Gosset-KEM-512-Compact, so one seed yields identical keys in both. Key pairs must never be reused across sets.
+\item Independent cryptanalysis is needed.
+\end{itemize}
+
+\section{Conclusion}
+$\E$ message coding is an effective way to buy margin in ML-KEM, either as smaller ciphertexts or as $+5$ to $+11$ bits of lattice security at FIPS sizes. Its multi-dimensional decoder, however, introduces an attack surface the standard decoder does not have: correlated decryption errors that an adversary can select for. With a naive consecutive layout this pushes the level-1 Compact set below its claimed security. A distinct-distance coefficient layout removes most of the effect at no cost. Higher-dimensional codes are inherently more exposed. We recommend that future proposals of lattice codes for LWE-based KEMs include this analysis.
+
+\paragraph{Availability.} Code, specification, test vectors and all analysis scripts: \url{https://github.com/calabroadrian/gosset-kem}.
+
+\paragraph{Acknowledgements.} The analysis code, implementation and drafting were developed with the assistance of an AI system (Claude, Anthropic). All results are reproducible from the published repository.
+
+\begin{thebibliography}{99}\small
+\bibitem{fips203} NIST. \emph{FIPS 203: Module-Lattice-Based Key-Encapsulation Mechanism Standard}. 2024.
+\bibitem{liu26} S.~Liu, A.~Sakzad. \emph{On the Maximum Toroidal Distance Code for Lattice-Based Public-Key Cryptography}. arXiv:2601.08452, 2026.
+\bibitem{liu23} S.~Liu, A.~Sakzad. \emph{Lattice Codes for CRYSTALS-Kyber}. arXiv:2308.13981, 2023.
+\bibitem{saliba21} C.~Saliba, L.~Luzzi, C.~Ling. \emph{Error Correction for FrodoKEM Using the Gosset Lattice}. arXiv:2110.01740, 2021.
+\bibitem{paiva24} T.~B.~Paiva, M.~A.~Simplicio Jr, S.~M.~Hafiz, B.~Yildiz, E.~L.~Cominetti, H.~S.~Ogawa. \emph{Tailorable codes for lattice-based KEMs with applications to compact ML-KEM instantiations}. IACR TCHES 2025; ePrint 2024/1243.
+\bibitem{danvers19} J.-P.~D'Anvers, Q.~Guo, T.~Johansson, A.~Nilsson, F.~Vercauteren, I.~Verbauwhede. \emph{Decryption failure attacks on IND-CCA secure lattice-based schemes}. PKC 2019.
+\bibitem{danvers20} J.-P.~D'Anvers, M.~Rossi, F.~Virdia. \emph{(One) failure is not an option: Bootstrapping the search for failures in lattice-based encryption schemes}. EUROCRYPT 2020; ePrint 2019/1399.
+\bibitem{hhk17} D.~Hofheinz, K.~H\"ovelmanns, E.~Kiltz. \emph{A modular analysis of the Fujisaki--Okamoto transformation}. TCC 2017.
+\bibitem{estimator} M.~R.~Albrecht et al. \emph{lattice-estimator}. \url{https://github.com/malb/lattice-estimator}, commit f31b86f.
+\bibitem{matzov} MATZOV. \emph{Report on the Security of LWE: Improved Dual Lattice Attack}. 2022.
+\bibitem{conway} J.~H.~Conway, N.~J.~A.~Sloane. \emph{Sphere Packings, Lattices and Groups}. Springer, 3rd ed., 1999.
+\bibitem{isw} Y.~Ishai, A.~Sahai, D.~Wagner. \emph{Private circuits: securing hardware against probing attacks}. CRYPTO 2003.
+\bibitem{xwing} M.~Barbosa, D.~Connolly, J.~D.~Duarte, A.~Kaiser, P.~Schwabe, K.~Varner, B.~Westerbaan. \emph{X-Wing: The Hybrid KEM You've Been Looking For}. ePrint 2024/039.
+\end{thebibliography}
+\end{document}

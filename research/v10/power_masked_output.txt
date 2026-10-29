@@ -1,0 +1,4 @@
+masked block: 4978 leakage points per trace (both shares of every intermediate)
+[1] first-order TVLA, sigma=1.0, 20k+20k traces: max|t| = 3.62  (no first-order leak);  unmasked decoder: max|t| = 86.0
+[2] single-trace LDA attack, sigma=1.0: masked bits 50.1% bytes 0.42%   |   unmasked bits 86.8% bytes 31.62%   (random: 50% / 0.39%)
+[3] second-order TVLA (product of the 2 shares of each value): max|t| = 78.9  (second-order leak, as expected for 1st-order masking)

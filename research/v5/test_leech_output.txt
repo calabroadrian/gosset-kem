@@ -1,0 +1,4 @@
+[1] round trip, 3000 random 36-bit messages: OK
+[3] sampled min squared distance to origin point: 48.0 (Leech min norm 32 expected >= 32)
+[2] C vs brute-force nearest point: 1500 blocks, 0 with larger distance than optimum [6s]
+[4] real ML-KEM noise (k=2, eta=11): Leech block failure 1.267e-04 (76/600000), union-bound prediction 1.047e-04 [70s]

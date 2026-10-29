@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use Gosset-KEM, please cite it as below."
+title: "Gosset-KEM: E8 Message Coding for ML-KEM and Correlation-Based Failure Boosting against Multi-Dimensional Lattice Codes"
+authors:
+  - family-names: Calabro
+    given-names: Adrian
+version: 1.0.0
+date-released: 2026-10-29
+license: Apache-2.0
+repository-code: "https://github.com/calabroadrian/gosset-kem"

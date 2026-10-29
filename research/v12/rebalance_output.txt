@@ -1,0 +1,18 @@
+k=2 ML-KEM: ct 768 B, DFR 2^-139, security conservative 113.5, with rounding 117.0
+   eta1=4 eta2=3 du=10 dv=4  ct 768 B  DFR 2^-147  conservative 119.5 (+6.1)  with rounding 122.3 (+5.3)
+   eta1=3 eta2=4 du=10 dv=4  ct 768 B  DFR 2^-190  conservative 117.0 (+3.6)  with rounding 117.0 (+0.0)
+   eta1=3 eta2=4 du=9 dv=5  ct 736 B  DFR 2^-153  conservative 117.0 (+3.6)  with rounding 117.0 (+0.0)
+   eta1=3 eta2=3 du=10 dv=4  ct 768 B  DFR 2^-212  conservative 117.0 (+3.6)  with rounding 117.0 (+0.0)
+   eta1=3 eta2=3 du=9 dv=5  ct 736 B  DFR 2^-165  conservative 117.0 (+3.6)  with rounding 117.0 (+0.0)
+k=3 ML-KEM: ct 1088 B, DFR 2^-165, security conservative 180.2, with rounding 180.2
+   eta1=3 eta2=2 du=10 dv=4  ct 1088 B  DFR 2^-167  conservative 185.5 (+5.3)  with rounding 190.7 (+10.5)
+   eta1=2 eta2=4 du=10 dv=4  ct 1088 B  DFR 2^-213  conservative 180.2 (+0.0)  with rounding 180.2 (+0.0)
+   eta1=2 eta2=4 du=9 dv=5  ct 1024 B  DFR 2^-165  conservative 180.2 (+0.0)  with rounding 180.2 (+0.0)
+   eta1=2 eta2=3 du=10 dv=4  ct 1088 B  DFR 2^-241  conservative 180.2 (+0.0)  with rounding 180.2 (+0.0)
+   eta1=2 eta2=3 du=9 dv=5  ct 1024 B  DFR 2^-179  conservative 180.2 (+0.0)  with rounding 180.2 (+0.0)
+k=4 ML-KEM: ct 1568 B, DFR 2^-175, security conservative 252.6, with rounding 252.6
+   eta1=3 eta2=2 du=11 dv=5  ct 1568 B  DFR 2^-189  conservative 259.9 (+7.3)  with rounding 263.4 (+10.8)
+   eta1=2 eta2=4 du=11 dv=5  ct 1568 B  DFR 2^-239  conservative 252.6 (+0.0)  with rounding 252.6 (+0.0)
+   eta1=2 eta2=4 du=11 dv=4  ct 1536 B  DFR 2^-188  conservative 252.6 (+0.0)  with rounding 252.6 (+0.0)
+   eta1=2 eta2=4 du=10 dv=5  ct 1440 B  DFR 2^-208  conservative 252.6 (+0.0)  with rounding 252.6 (+0.0)
+   eta1=2 eta2=3 du=11 dv=5  ct 1568 B  DFR 2^-279  conservative 252.6 (+0.0)  with rounding 252.6 (+0.0)

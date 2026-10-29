@@ -1,0 +1,3 @@
+[1] RFC 7748 sec. 5.2 vectors (vs RFC value and OpenSSL): OK
+[2] RFC 7748 iterated 1 / 1000: OK / OK
+[3] vs OpenSSL, 2000 random key pairs + shared secrets: 2000/2000

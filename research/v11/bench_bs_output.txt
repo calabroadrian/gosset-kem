@@ -1,0 +1,4 @@
+  E8 AVX2 (unmasked)                  4186 cycles
+  E8 masked v10 (per block)         421922 cycles
+  E8 masked v11 (bitsliced)          34256 cycles
+  speed-up bitsliced vs v10: 12.3x

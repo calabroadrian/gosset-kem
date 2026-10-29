@@ -1,0 +1,14 @@
+ML-KEM-512           c8f3461b8ad43fbccc883944a0b00927
+ML-KEM-768           28070c7003a825c687201df34a2edccc
+ML-KEM-1024          98d1c686449fe0217838de14a5b7808d
+ML-KEM-512+E8        d83d309152f8ac20dd0f9ba157968895
+ML-KEM-768+E8        323d51cc31cdfa4da13368da7dd1944e
+ML-KEM-1024+E8       d192aadef032ab50b4e4c104e938382b
+AFA12-512-MaxSec     eb935ca8e5a716a37b3a10e68f552836
+AFA12-768-MaxSec     827cb54586e3ed7c06205ff2a2d34f05
+AFA12-1024-MaxSec    3880a7a69cbd6c723ad1cacac0e8890c
+Hybrid-C             26a7ed8060780b0f7c7062e92d66c43a
+Hybrid-S             3c501809cb8064e4375ee0b6b8982fe3
+DEM+E8               19802cb299da1345fcc3e21bdcc70e51
+GLOBAL               d1174378831d1cd846d70f5787a0c3a5
+internal failures: 0

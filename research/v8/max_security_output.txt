@@ -1,0 +1,10 @@
+level       code   eta1 eta2  log2 DFR  beta classical  quantum
+ML-KEM-512  std       3    2    -139.1   406     118.6    107.6
+ML-KEM-512  E8        4    3    -146.6   424     123.8    112.4
+  FIPS 203  std       3    2             406     118.6    107.6
+ML-KEM-768  std       2    2    -165.3   624     182.2    165.4
+ML-KEM-768  E8        3    2    -166.8   660     192.7    174.9
+  FIPS 203  std       2    2             624     182.2    165.4
+ML-KEM-1024 std       2    2    -175.2   874     255.2    231.6
+ML-KEM-1024 E8        3    2    -189.4   923     269.5    244.6
+  FIPS 203  std       2    2             874     255.2    231.6
