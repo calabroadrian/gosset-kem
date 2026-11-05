@@ -54,6 +54,10 @@ Expected final line: `RESULT: ALL TESTS PASSED`.
 | Gosset-KEM-768-MaxSec | 3 | 3 | 2 | 10 | 4 | 1088 | 2^-167 | 207.2 (ML-KEM 196.4) |
 | Gosset-KEM-1024-MaxSec | 4 | 3 | 2 | 11 | 5 | 1568 | 2^-189 | 271.7 (ML-KEM 262.3) |
 
+## AI use
+
+This work is designated **substantial AI contribution** under the [IACR AI Policy](https://iacr.org/policy/AIPolicy.html). The author conceived the framework and design, including the use of E8 in an ML-KEM-style scheme. He also set the research direction, guided the work, ran the hardware tests and made all design and publication decisions. An AI system (Claude, Anthropic) wrote the implementation and analysis code, derived the proofs, found the correlation-based failure-boosting attack and its countermeasure, ran the experiments and drafted the paper. The author takes full responsibility for the content.
+
 ## Citation
 
 Repository: https://github.com/calabroadrian/gosset-kem

@@ -48,6 +48,12 @@ We give the exact form of this sensitivity, a tail model for it (validated again
 Finally, we report a negative result for $\E$-structured \emph{noise}, a constant-time and a first-order masked implementation, and compiler-induced timing leaks found during testing.
 \end{abstract}
 
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule}{\small
+\textbf{AI use designation (IACR AI Policy): Substantial AI contribution.}
+\emph{Author:} conceived the AFA-12/Gosset-KEM framework and its design, including the use of the $E_8$ lattice inside an ML-KEM-style scheme, from prior independent work (an earlier framework paper and an experimental harness). He also set the research direction, guided and decided each step, and ran the hardware timing tests.
+\emph{AI system (Claude, Anthropic):} wrote the C implementation (including the masked version) and the analysis code. It also derived the proofs, found the correlation-based failure-boosting attack and the distinct-distance layout countermeasure, obtained the Leech impossibility result, ran the experiments and lattice-estimator evaluations, and drafted this paper.
+The author has reviewed the work and takes full responsibility for its content. All results can be reproduced from the published repository.}}
+
 \tableofcontents
 
 \section{Introduction}
@@ -407,7 +413,7 @@ Hardware validation is open.
 \section{Conclusion}
 $\E$ message coding buys margin in ML-KEM, either as 6--10\% smaller ciphertexts or as $+5$ to $+11$ bits of lattice security at FIPS sizes. Multi-dimensional decoders, however, are sensitive to correlations between decryption-error coefficients, and those correlations are controlled by attacker-known ciphertext randomness. We characterised this sensitivity exactly. With consecutive blocks it is large enough to break the level-1 claim; a distinct-distance coefficient layout removes most of it at no cost. Higher-dimensional codes such as the Leech lattice are more exposed, and no layout can fully protect them. Any proposal of lattice codes for LWE-based KEMs should include this analysis.
 
-\paragraph{Acknowledgements.} The analysis code, implementation and drafting were developed with the assistance of an AI system (Claude, Anthropic). The author is responsible for the content, and all results are reproducible from the published repository.
+\paragraph{AI use.} This work is designated \emph{substantial AI contribution} under the IACR AI Policy; the first page sets out the author's and the AI system's contributions. The author is responsible for the content, and all results are reproducible from the published repository.
 
 \appendix
 \section{The layout table}\label{app:layout}
